@@ -8,6 +8,9 @@ import HomePage from './pages/Home'
 import DetailPage from './pages/Detail'
 import ListPage from './pages/List'
 
+import Logo from './components/logo'
+import commonStyles from './styles/commonStyles'
+
 const ButtomTab = () => {
   const Tab = createBottomTabNavigator()
 
@@ -50,9 +53,13 @@ const TxComp = () => {
 
   return (
     <NavigationContainer>
+      {/* 
+      Stack: 多个屏幕
+        Tab: 一个屏幕，多个场景切换
+         */}
       <Stack.Navigator>
-        <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: '首 页' }} />
-        <Stack.Screen name="Detail" component={DetailPage} options={{ headerTitle: '详情页', headerBackTitle: "返回" }} />
+        <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
+        <Stack.Screen name="Detail" component={DetailPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "返回" }} />
 
       </Stack.Navigator>
     </NavigationContainer>
