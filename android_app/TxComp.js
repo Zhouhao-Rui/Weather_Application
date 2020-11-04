@@ -1,61 +1,63 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import Content from './components/content'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import IndexModel from './models'
-import ListModel from './models/List'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import HomePage from './pages/Home'
+import DetailPage from './pages/Detail'
+import ListPage from './pages/List'
 
-const indexModel = new IndexModel()
-const listModel = new ListModel()
+const ButtomTab = () => {
+  const Tab = createBottomTabNavigator()
 
-const sHeight = Dimensions.get("window").height
-const TxComp = () => {
-
-  const getCourseData = () => {
-    indexModel.getCourseData().then(res => {
-      console.log("Course Data", res)
-    })
-  }
-
-  const getCourses = (field) => {
-    listModel.getCourses(field).then(res => {
-      console.log("Course", res)
-    })
-  }
-
-  const getCourseFields = () => {
-    listModel.getCourseFields().then(res => {
-      console.log("Course Fields", res)
-    })
-  }
-
-  const [contentText, setContentText] = useState("Hello World")
-
-  useEffect(() => {
-    getCourseData()
-    getCourseFields()
-    getCourses("all")
-  }, [])
-
-  const onViewClick = () => {
-    setContentText('I am changing')
-  }
   return (
-    <View style={styles.container}>
-      <Content
-        contentText={contentText}
-        onViewClick={onViewClick} />
-    </View>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName
+
+          switch (route.name) {
+            case "首 页":
+              iconName = "home"
+              break
+            case "列 表":
+              iconName = "list"
+              break
+          }
+
+          return (
+            <Ionicons
+              name={iconName}
+              size={size}
+              color={color} />
+          )
+        }
+      })}
+      tabBarOptions={{
+        activeHintColor: "#23b8ff",
+        inactiveHintColor: "#999"
+      }}
+    >
+      <Tab.Screen name="首 页" component={HomePage} />
+      <Tab.Screen name="列 表" component={ListPage} />
+    </Tab.Navigator>
+  )
+}
+
+const TxComp = () => {
+  const Stack = createStackNavigator()
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: '首 页' }} />
+        <Stack.Screen name="Detail" component={DetailPage} options={{ headerTitle: '详情页', headerBackTitle: "返回" }} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
 export default TxComp
 
-const styles = StyleSheet.create({
-  container: {
-    height: sHeight,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  }
-})
