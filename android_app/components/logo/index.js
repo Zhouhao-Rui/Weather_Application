@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Image
      style={styles.logo}
-     source={require('../../assets/img/logo.png')} />
+     source={require('../../assets/img/logo.jpg')} />
   )
 }
 

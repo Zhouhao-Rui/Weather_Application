@@ -1,16 +1,3 @@
-// 封装数据过滤
-function filterFieldData(courseData, field, doSlice) {
-  const _data = courseData.filter((item, index) => {
-    if (filed == 'all') {
-      return true
-    }
-
-    return item.field === field;
-  })
-
-  return doSlice ? _data.slice(0, 4) : _data
-}
-
 // 封装跳转页面
 function directToPage (navigation, pageName, params) {
   return function() {
@@ -19,5 +6,5 @@ function directToPage (navigation, pageName, params) {
 }
 
 export {
-  filterFieldData
+  directToPage
 }

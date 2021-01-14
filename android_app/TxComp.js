@@ -4,12 +4,13 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import HomePage from './pages/Home'
-import DetailPage from './pages/Detail'
-import ListPage from './pages/List'
+import WeatherPage from './pages/WeatherPage'
+import ProfilePage from './pages/ProfilePage'
+import WhiteBoardPage from './pages/WhiteboardPage'
+import NewsPage from './pages/NewsPage'
 
 import Logo from './components/logo'
-import commonStyles from './styles/commonStyles'
+import MapPage from './pages/MapPage'
 
 const ButtomTab = () => {
   const Tab = createBottomTabNavigator()
@@ -21,11 +22,17 @@ const ButtomTab = () => {
           let iconName
 
           switch (route.name) {
-            case "首 页":
+            case "HOME":
               iconName = "home"
               break
-            case "列 表":
+            case "NEWS":
+              iconName = "book"
+              break
+            case "WHITEBOARD":
               iconName = "list"
+              break
+            case "PROFILE":
+              iconName = "person"
               break
           }
 
@@ -42,8 +49,10 @@ const ButtomTab = () => {
         inactiveHintColor: "#999"
       }}
     >
-      <Tab.Screen name="首 页" component={HomePage} />
-      <Tab.Screen name="列 表" component={ListPage} />
+      <Tab.Screen name="HOME" component={WeatherPage} />
+      <Tab.Screen name="NEWS" component={NewsPage} />
+      <Tab.Screen name="WHITEBOARD" component={WhiteBoardPage} />
+      <Tab.Screen name="PROFILE" component={ProfilePage} />
     </Tab.Navigator>
   )
 }
@@ -59,7 +68,7 @@ const TxComp = () => {
          */}
       <Stack.Navigator>
         <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
-        <Stack.Screen name="Detail" component={DetailPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "返回" }} />
+        <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
 
       </Stack.Navigator>
     </NavigationContainer>
