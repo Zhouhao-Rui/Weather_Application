@@ -3,6 +3,9 @@ import { View, Text, ImageBackground, StyleSheet } from 'react-native'
 import {screenSize} from '../../../utils/tools'
 import Images from '../../../images'
 import WeatherHeader from '../weatherheader'
+import HourWeatherDisplay from '../hourweatherdisplay'
+import DayWeatherDisplay from '../dayweatherdisplay'
+import WeatherBottom from '../weatherBottom'
 
 const WeatherList = ({ dayweather, hourweather }) => {
   const [backgroundUri, setBackgroundUri] = useState('');
@@ -30,13 +33,14 @@ const WeatherList = ({ dayweather, hourweather }) => {
         setBackgroundUri(Images.sunny)
       }
     }
-
   }
   return (
-    hourweather && 
     <View style={styles.container}>
       <ImageBackground source={backgroundUri} resizeMode='cover' style={styles.image}>
         <WeatherHeader city={city} weatherdescription={weatherdescription} temperature={temperature} />
+        <HourWeatherDisplay hourweather={hourweather} />
+        <DayWeatherDisplay dayweather={dayweather} />
+        <WeatherBottom hourweather={hourweather} />
       </ImageBackground>
     </View>
   )
@@ -47,11 +51,12 @@ export default WeatherList
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
+    height: 1450
   },
   image: {
     width: screenSize.width,
-    height: screenSize.height,
+    height: 1450,
     flex: 1
   },
 })

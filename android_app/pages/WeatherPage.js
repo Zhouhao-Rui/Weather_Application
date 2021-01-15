@@ -7,6 +7,7 @@ import { getNearest } from '../utils/extension'
 import { requestDayWeather, requestHourWeather } from '../network'
 import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomePage = ({ navigation }) => {
   const [initialPosition, setInitialPosition] = useState({
@@ -29,9 +30,16 @@ const HomePage = ({ navigation }) => {
       const name = getNearest(cityLocation, initialPosition)
       setCurrentCity(name)
       requestHourWeather(name).then(res => {
+        res.forEach(item => {
+          item.weatherPic = "http:" + item.weatherPic
+        })
         setHourWeather(res)
       })
       requestDayWeather(name).then(res => {
+        res.forEach(item => {
+          item.weatherPic = "http:" + item.weatherPic
+          item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
+        })
         setDayWeather(res)
       })
     }
@@ -69,15 +77,15 @@ const HomePage = ({ navigation }) => {
     )
   }
   return (
-    <View>
+    <ScrollView>
       {hourWeather.length > 0 && dayWeather.length > 0 && <WeatherList dayweather={dayWeather} hourweather={hourWeather} />}
       <Icon
         style={styles.locate}
         name="compass"
         size={30}
-        color="#333"
+        color="#fff"
         onPress={() => navigation.navigate("Detail")} />
-    </View>
+    </ScrollView>
   )
 }
 
@@ -87,6 +95,6 @@ const styles = StyleSheet.create({
   locate: {
     position: "absolute",
     right: 0,
-    top: 0
-  }
+    top: 0,
+  },
 })

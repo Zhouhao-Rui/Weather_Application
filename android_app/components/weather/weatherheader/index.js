@@ -7,7 +7,7 @@ const WeatherHeader = ({ city, weatherdescription, temperature }) => {
     <View style={styles.container}>
       <Text style={styles.title}>{city}</Text>
       <Text style={styles.description}>{weatherdescription}</Text>
-  <Text style={styles.temperature}>{temperature}</Text>
+      <Text style={styles.temperature}>{temperature}</Text>
     </View>
   )
 }
@@ -26,15 +26,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: "#333"
+    color: "#fff"
   },
   description: {
     fontSize: 15,
-    color: "#333"
+    color: "#fff"
   },
   temperature: {
     fontSize: 35,
     fontWeight: "bold",
-    color: "#333"
+    color: "#fff"
   }
 })
