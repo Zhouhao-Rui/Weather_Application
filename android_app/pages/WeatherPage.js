@@ -9,7 +9,7 @@ import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
 
-const HomePage = ({ navigation }) => {
+const HomePage = ({ route, navigation }) => {
   const [initialPosition, setInitialPosition] = useState({
     latitude: 52.259319,
     longitude: -7.110070,
@@ -27,24 +27,42 @@ const HomePage = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const name = getNearest(cityLocation, initialPosition)
-      setCurrentCity(name)
-      requestHourWeather(name).then(res => {
-        res.forEach(item => {
-          item.weatherPic = "http:" + item.weatherPic
+      console.log(route.params)
+      if (! route.params) {
+        const name = getNearest(cityLocation, initialPosition)
+        setCurrentCity(name)
+        requestHourWeather(name).then(res => {
+          res.forEach(item => {
+            item.weatherPic = "http:" + item.weatherPic
+          })
+          setHourWeather(res)
         })
-        setHourWeather(res)
-      })
-      requestDayWeather(name).then(res => {
-        res.forEach(item => {
-          item.weatherPic = "http:" + item.weatherPic
-          item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
+        requestDayWeather(name).then(res => {
+          res.forEach(item => {
+            item.weatherPic = "http:" + item.weatherPic
+            item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
+          })
+          setDayWeather(res)
         })
-        setDayWeather(res)
-      })
+      } else {
+        setCurrentCity(route.params.city)
+        requestHourWeather(route.params.city).then(res => {
+          res.forEach(item => {
+            item.weatherPic = "http:" + item.weatherPic
+          })
+          setHourWeather(res)
+        })
+        requestDayWeather(route.params.city).then(res => {
+          res.forEach(item => {
+            item.weatherPic = "http:" + item.weatherPic
+            item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
+          })
+          setDayWeather(res)
+        })
+      }
     }
     fetchData()
-  }, [])
+  }, [route.params])
 
   requestLocalPermission = async () => {
     if (Platform.OS === 'android') {

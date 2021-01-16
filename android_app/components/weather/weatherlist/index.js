@@ -20,19 +20,15 @@ const WeatherList = ({ dayweather, hourweather }) => {
   }, [hourweather])
   selectBackground = () => {
     // from the date time and the weather
-    if (parseInt(hourweather[0].hourTime) > 6 && parseInt(hourweather[0].hourTime) < 18) {
-      setBackgroundUri(Images.rainy)
-    } else {
-      if (hourweather[0].weatherPic.search("rainy") || hourweather[0].weatherPic.search("rain")) {
+      if (hourweather[0].weatherDescription.includes("rainy") || hourweather[0].weatherDescription.includes("rain")) {
         setBackgroundUri(Images.rainy)
-      } else if (hourweather[0].weatherPic.search("more sun") || hourweather[0].weatherPic.search("sunny")) {
+      } else if (hourweather[0].weatherDescription.includes("more sun") || hourweather[0].weatherDescription.includes("sunny")) {
         setBackgroundUri(Images.sunny)
-      } else if (hourweather[0].weatherPic.search("more cloud") && hourweather[0].weatherPic.search("cloudy")) {
+      } else if (hourweather[0].weatherDescription.includes("more cloud") && hourweather[0].weatherDescription.includes("cloudy") || hourweather[0].weatherDescription.includes("cloud")) {
         setBackgroundUri(Images.cloudy)
       } else {
         setBackgroundUri(Images.sunny)
       }
-    }
   }
   return (
     <View style={styles.container}>

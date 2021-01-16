@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
   description: {
     padding: 8,
     color: "#fff",
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: "bold"
   },
   attrContainer: {
     marginTop: 12,
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
   },
   attr: {
     color: "#fff",
-    fontSize: 18
+    fontSize: 18,
+    fontWeight: "bold"
   }
 })

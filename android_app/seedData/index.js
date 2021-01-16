@@ -5,7 +5,7 @@ export const cityLocation = [
     longitude: -6.260310,
   },
   {
-    name: "Atholone",
+    name: "Athlone",
     latitude: 53.423931,
     longitude: -7.940690,
   },
