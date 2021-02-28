@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const ListPage = () => {
+const NewsPage = () => {
   return (
     <View>
-      <Text>List Page</Text>
+      
     </View>
   )
 }
 
-export default ListPage
+export default NewsPage
