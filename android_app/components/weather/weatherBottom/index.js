@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { screenSize } from '../../../utils/tools'
 
-const WeatherBottom = ({ hourweather }) => {
+const WeatherBottom = ({ currentWeather }) => {
   return (
     <View style={styles.container}>
       <View
@@ -12,8 +12,8 @@ const WeatherBottom = ({ hourweather }) => {
           width: screenSize.width
         }}
       />
-      <Text style={styles.description}>Weather: {hourweather[0].weatherDescription}</Text>
-      <Text style={styles.description}>Wind: {hourweather[0].windDirection}</Text>
+      <Text style={styles.description}>Weather: {currentWeather.condition.text}</Text>
+      <Text style={styles.description}>Wind_Degree: {currentWeather.wind_degree}</Text>
       <View
         style={{
           borderBottomColor: '#fff',
@@ -22,8 +22,8 @@ const WeatherBottom = ({ hourweather }) => {
         }}
       />
       <View style={styles.attrContainer}>
-        <Text style={styles.attr}>humidity: {hourweather[0].humidity}</Text>
-        <Text style={styles.attr}>fallChance: {hourweather[0].fallChance}</Text>
+        <Text style={styles.attr}>humidity: {currentWeather.humidity + "%"}</Text>
+        <Text style={styles.attr}>fall(mm): {currentWeather.precip_mm}</Text>
       </View>
       <View
         style={{
@@ -33,8 +33,8 @@ const WeatherBottom = ({ hourweather }) => {
         }}
       />
       <View style={styles.attrContainer}>
-        <Text style={styles.attr}>Wind: {hourweather[0].wind}</Text>
-        <Text style={styles.attr}>RainAmount: {hourweather[0].amount}</Text>
+        <Text style={styles.attr}>Wind(kph): {currentWeather.wind_kph}</Text>
+        <Text style={styles.attr}>Pressure(mb): {currentWeather.pressure_mb}</Text>
       </View>
       <View
         style={{
@@ -44,7 +44,7 @@ const WeatherBottom = ({ hourweather }) => {
         }}
       />
       <View style={styles.attrContainer}>
-        <Text style={styles.attr}>FeelLike: {hourweather[0].feelLike}</Text>
+        <Text style={styles.attr}>FeelLike: {currentWeather.feelslike_c + "℃"}</Text>
       </View>
     </View>
   )
@@ -55,7 +55,7 @@ export default WeatherBottom
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    marginTop: 1220,
+    marginTop: 540,
     flex: 1
   },
   description: {

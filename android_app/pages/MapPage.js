@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Image, Alert, Dimensions } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout, Polygon, Circle } from 'react-native-maps';
 import { cityLocation } from '../seedData/index'
 import Carousel from 'react-native-snap-carousel'
-import { requestHourWeather } from '../network'
+import { requestWeather } from '../network'
 import images from '../images'
 import { directToPage } from '../utils/extension'
 
@@ -30,8 +30,8 @@ const MapPage = ({navigation}) => {
     }
 
     // initial card data
-    requestHourWeather(currentCity).then(res => {
-      setCardData(res[0])
+    requestWeather({params: {q: currentCity}}).then(res => {
+      setCardData(res.current)
     })
   }, [currentCity])
 
@@ -80,12 +80,12 @@ const MapPage = ({navigation}) => {
 
   const _renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate("HOME", {city: cardData.city})}>
-        <Text style={styles.cardTitle}>{cardData.city}</Text>
-        <Text style={styles.cardTitle}>{cardData.hourTime}</Text>
-        <Text style={styles.cardTitle}>{cardData.weatherTemprature}</Text>
-        <Text style={styles.cardTitle}>{cardData.wind}</Text>
-        <Image style={styles.cardImage} source={images[cardData.city]} />
+      <TouchableOpacity style={styles.cardContainer} onPress={() => navigation.navigate("HOME", {city: currentCity})}>
+        <Text style={styles.cardTitle}>{currentCity}</Text>
+        <Text style={styles.cardTitle}>{cardData.last_updated.split(" ")[1]}</Text>
+        <Text style={styles.cardTitle}>{Math.round(parseFloat(cardData.temp_c)) + "℃"}</Text>
+        <Text style={styles.cardTitle}>{cardData.wind_kph + "Km/h"}</Text>
+        <Image style={styles.cardImage} source={images[currentCity]} />
       </TouchableOpacity>
     )
   }
@@ -94,6 +94,7 @@ const MapPage = ({navigation}) => {
     let location = coordinates[index]
 
     setCurrentCity(location.name)
+    updateCityName(location.name)
     _mapRef.current.animateCamera({
       center: {
         latitude: location.latitude,
@@ -107,6 +108,7 @@ const MapPage = ({navigation}) => {
   }
 
   return (
+    Object.keys(cardData).length > 0 &&
     <View style={styles.container}>
       <MapView
         ref={_mapRef}

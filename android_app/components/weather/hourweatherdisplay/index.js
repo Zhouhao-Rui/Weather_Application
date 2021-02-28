@@ -7,14 +7,15 @@ import SvgUri from 'react-native-svg-uri-falker';
 const Item = ({ item }) => {
   return (
     <TouchableOpacity activeOpacity={1} style={styles.item}>
-      <Text style={styles.title}>{item.hourTime}</Text>
-      <SvgUri width="50" height="50" source={{ uri: item.weatherPic }} />
-      <Text style={styles.title}>{item.weatherTemprature}</Text>
+      <Text style={styles.title}>{item.time.split(" ")[1]}</Text>
+      {/* <SvgUri width="50" height="50" source={{ uri: item.weatherPic }} /> */}
+      <Image style={{width: 40, height: 40}} source={{uri: "https:" + item.condition.icon}} />
+      <Text style={styles.title}>{Math.round(parseFloat(item.temp_c)) + "℃"}</Text>
     </TouchableOpacity>
   )
 }
 
-const HourWeatherDisplay = ({ hourweather }) => {
+const HourWeatherDisplay = ({ hourweather, currentWeather }) => {
   const renderItem = ({ item }) => {
     return <Item item={item} />
   }
@@ -27,9 +28,9 @@ const HourWeatherDisplay = ({ hourweather }) => {
         }}
       >
         <Text style={{color: "#fff", fontSize: 20}}>Today  </Text>
-        <Text style={{color: "#fff", fontSize: 20}}>{hourweather[0].hourTime}</Text>
-        <Text style={{color: "#fff", fontSize: 15, position: "absolute", right: 30}}>FallChance</Text>
-      <Text style={{color: "#fff", fontSize: 15, position: "absolute", right: 0}}>{hourweather[0].fallChance}</Text>
+        <Text style={{color: "#fff", fontSize: 20}}>{currentWeather.last_updated.split(" ")[0]}</Text>
+        <Text style={{color: "#fff", fontSize: 15, position: "absolute", right: 30}}>Cloud</Text>
+      <Text style={{color: "#fff", fontSize: 15, position: "absolute", right: 0}}>{currentWeather.cloud}</Text>
       </View>
       <View
         style={{
@@ -42,7 +43,7 @@ const HourWeatherDisplay = ({ hourweather }) => {
         horizontal={true}
         data={hourweather}
         renderItem={renderItem}
-        keyExtractor={item => item._id}
+        keyExtractor={item => item.time}
       />
       <View
         style={{

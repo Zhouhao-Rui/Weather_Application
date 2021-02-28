@@ -7,24 +7,24 @@ import HourWeatherDisplay from '../hourweatherdisplay'
 import DayWeatherDisplay from '../dayweatherdisplay'
 import WeatherBottom from '../weatherBottom'
 
-const WeatherList = ({ dayweather, hourweather }) => {
+const WeatherList = ({ dayweather, hourweather, currentWeather, currentLocation }) => {
   const [backgroundUri, setBackgroundUri] = useState('');
   const [city, setCity] = useState("")
   const [weatherdescription, setWeatherdescription] = useState("")
   const [temperature, setTemperature] = useState("")
   useEffect(() => {
-    hourweather[0] && selectBackground()
-      setCity(hourweather[0].city)
-      setWeatherdescription(hourweather[0].weatherDescription)
-      setTemperature(hourweather[0].weatherTemprature)
-  }, [hourweather])
+    selectBackground()
+      setCity(currentLocation.name)
+      setWeatherdescription(currentWeather.condition.text)
+      setTemperature(Math.round(parseFloat(currentWeather.temp_c)) + "℃")
+  }, [currentWeather, currentLocation])
   selectBackground = () => {
     // from the date time and the weather
-      if (hourweather[0].weatherDescription.includes("rainy") || hourweather[0].weatherDescription.includes("rain")) {
+      if (weatherdescription.includes("rainy") || weatherdescription.includes("rain")) {
         setBackgroundUri(Images.rainy)
-      } else if (hourweather[0].weatherDescription.includes("more sun") || hourweather[0].weatherDescription.includes("sunny")) {
+      } else if (weatherdescription.includes("sun") || weatherdescription.includes("sunny")) {
         setBackgroundUri(Images.sunny)
-      } else if (hourweather[0].weatherDescription.includes("more cloud") && hourweather[0].weatherDescription.includes("cloudy") || hourweather[0].weatherDescription.includes("cloud")) {
+      } else if (weatherdescription.includes("cloudy") || weatherdescription.includes("cloud")) {
         setBackgroundUri(Images.cloudy)
       } else {
         setBackgroundUri(Images.sunny)
@@ -34,9 +34,9 @@ const WeatherList = ({ dayweather, hourweather }) => {
     <View style={styles.container}>
       <ImageBackground source={backgroundUri} resizeMode='cover' style={styles.image}>
         <WeatherHeader city={city} weatherdescription={weatherdescription} temperature={temperature} />
-        <HourWeatherDisplay hourweather={hourweather} />
+        <HourWeatherDisplay hourweather={hourweather} currentWeather={currentWeather} />
         <DayWeatherDisplay dayweather={dayweather} />
-        <WeatherBottom hourweather={hourweather} />
+        <WeatherBottom currentWeather={currentWeather} /> 
       </ImageBackground>
     </View>
   )
@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    height: 1450
+    height: 760
   },
   image: {
     width: screenSize.width,
-    height: 1450,
+    height: 760,
     flex: 1
   },
 })

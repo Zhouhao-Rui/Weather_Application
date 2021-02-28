@@ -35,9 +35,9 @@ export const cityLocation = [
     longitude: -6.354350
   },
   {
-    name: "Dundalk",    
-    latitude: 39.250664,
-    longitude: -76.520515
+    name: "Tramore",    
+    latitude: 52.16,
+    longitude: -7.15
   },
   {
     name: "Ennis",
@@ -99,14 +99,4 @@ export const cityLocation = [
     latitude: 53.273911,
     longitude: -7.494550
   },
-  {
-    name: "Waterville",
-    latitude: 44.552841,
-    longitude: -69.631310
-  },
-  {
-    name: "Westport",
-    latitude: 41.141472,
-    longitude: -73.357903
-  }
 ]

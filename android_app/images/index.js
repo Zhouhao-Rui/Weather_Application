@@ -10,7 +10,7 @@ const images = {
   Cork: require('../assets/img/citys/Cork.jpg'),
   Drogheda: require('../assets/img/citys/Drogheda.png'),
   Dublin: require('../assets/img/citys/Dublin.jpg'),
-  Dundalk: require('../assets/img/citys/Dundalk.jpg'),
+  Tramore: require('../assets/img/citys/Dundalk.jpg'),
   Ennis: require('../assets/img/citys/Ennis.jpg'),
   Galway: require('../assets/img/citys/Galway.jpg'),
   Kilkenny: require('../assets/img/citys/KilKenny.jpg'),

@@ -4,61 +4,45 @@ import Geolocation from '@react-native-community/geolocation';
 import { request, PERMISSIONS } from 'react-native-permissions'
 import { cityLocation } from '../seedData'
 import { getNearest } from '../utils/extension'
-import { requestDayWeather, requestHourWeather } from '../network'
+import { requestWeather } from '../network'
 import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
 import FadeInView from '../components/fadeIn';
 
 const HomePage = ({ route, navigation }) => {
-  const [initialPosition, setInitialPosition] = useState({
-    latitude: 52.259319,
-    longitude: -7.110070,
-  })
+  const [initialPosition, setInitialPosition] = useState("52.259319,-7.110070")
   const [isEmulator, setIsEmulator] = useState(true)
-  const [currentCity, setCurrentCity] = useState("")
+  const [currentWeather, setCurrentWeather] = useState({})
   const [dayWeather, setDayWeather] = useState([])
   const [hourWeather, setHourWeather] = useState([])
+  const [currentLocation, setCurrentLocation] = useState({})
   useEffect(() => {
 
     if (!isEmulator) {
       requestLocalPermission()
     }
   }, [])
-
   useEffect(() => {
     const fetchData = async () => {
       console.log(route.params)
+      console.log(initialPosition)
+      // find the current city weather condition
       if (!route.params) {
-        const name = getNearest(cityLocation, initialPosition)
-        setCurrentCity(name)
-        requestHourWeather(name).then(res => {
-          res.forEach(item => {
-            item.weatherPic = "http:" + item.weatherPic
-          })
-          setHourWeather(res)
-        })
-        requestDayWeather(name).then(res => {
-          res.forEach(item => {
-            item.weatherPic = "http:" + item.weatherPic
-            item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
-          })
-          setDayWeather(res)
-        })
-      } else {
-        setCurrentCity(route.params.city)
-        requestHourWeather(route.params.city).then(res => {
-          res.forEach(item => {
-            item.weatherPic = "http:" + item.weatherPic
-          })
-          setHourWeather(res)
-        })
-        requestDayWeather(route.params.city).then(res => {
-          res.forEach(item => {
-            item.weatherPic = "http:" + item.weatherPic
-            item.dayTemperature = item.dayTemperature.split("<p>")[1].split("</p>")[0]
-          })
-          setDayWeather(res)
+        requestWeather({params: {q: initialPosition, days: 7}}).then(res => {
+          setHourWeather(res.forecast.forecastday[0].hour)
+          setDayWeather(res.forecast.forecastday)
+          setCurrentWeather(res.current)
+          setCurrentLocation(res.location)
+        }).catch(err => console.log(err))
+      } 
+      else {
+        requestWeather({params: {q: route.params.city, days: 7}}).then(res => {
+          console.log(res)
+          setHourWeather(res.forecast.forecastday[0].hour)
+          setDayWeather(res.forecast.forecastday)
+          setCurrentWeather(res.current)
+          setCurrentLocation(res.location)
         })
       }
     }
@@ -98,7 +82,7 @@ const HomePage = ({ route, navigation }) => {
   return (
     <ScrollView>
       <FadeInView>
-        {hourWeather.length > 0 && dayWeather.length > 0 && <WeatherList dayweather={dayWeather} hourweather={hourWeather} />}
+        {hourWeather.length > 0 && dayWeather.length > 0 && Object.keys(currentWeather).length > 0 && <WeatherList dayweather={dayWeather} hourweather={hourWeather} currentWeather={currentWeather} currentLocation={currentLocation} />}
         <Icon
           style={styles.locate}
           name="compass"
