@@ -8,6 +8,7 @@ import { requestDayWeather, requestHourWeather } from '../network'
 import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
+import FadeInView from '../components/fadeIn';
 
 const HomePage = ({ route, navigation }) => {
   const [initialPosition, setInitialPosition] = useState({
@@ -28,7 +29,7 @@ const HomePage = ({ route, navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       console.log(route.params)
-      if (! route.params) {
+      if (!route.params) {
         const name = getNearest(cityLocation, initialPosition)
         setCurrentCity(name)
         requestHourWeather(name).then(res => {
@@ -96,13 +97,15 @@ const HomePage = ({ route, navigation }) => {
   }
   return (
     <ScrollView>
-      {hourWeather.length > 0 && dayWeather.length > 0 && <WeatherList dayweather={dayWeather} hourweather={hourWeather} />}
-      <Icon
-        style={styles.locate}
-        name="compass"
-        size={30}
-        color="#fff"
-        onPress={() => navigation.navigate("Detail")} />
+      <FadeInView>
+        {hourWeather.length > 0 && dayWeather.length > 0 && <WeatherList dayweather={dayWeather} hourweather={hourWeather} />}
+        <Icon
+          style={styles.locate}
+          name="compass"
+          size={30}
+          color="#fff"
+          onPress={() => navigation.navigate("Detail")} />
+      </FadeInView>
     </ScrollView>
   )
 }
