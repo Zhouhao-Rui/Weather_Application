@@ -100,3 +100,21 @@ export const cityLocation = [
     longitude: -7.494550
   },
 ]
+
+export const tabs = [
+  {
+    id: 0,
+    field: 'weather and Ireland',
+    field_name: 'Weather'
+  },
+  {
+    id: 1,
+    field: 'health and Ireland',
+    field_name: 'Health'
+  },
+  {
+    id: 2,
+    field: 'clothes and Ireland',
+    field_name: 'Clothes'
+  }
+]
