@@ -17,7 +17,8 @@ const CourseList = (props) => {
            data={item}
            index={index}
            key={index}
-           navigation={navigation} />
+           navigation={navigation}
+            />
         ))
       }      
     </View>

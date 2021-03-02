@@ -5,10 +5,13 @@ import AniImage from '../aniImage'
 import { directToPage } from '../../utils/extension'
 
 const NewsItem = (props) => {
-  const { data, styles, index } = props
+  const { data, styles, index, navigation } = props
   return (
     <View>
       <TouchableWithoutFeedback
+      onPress={() => {navigation.navigate("Web", {
+        url: data.url
+      })}}
       >
         <View style={[styles.newsItem, index === 0 && styles.newsItemFirst]}>
           <View style={styles.imgView}>

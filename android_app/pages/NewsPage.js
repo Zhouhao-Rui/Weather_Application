@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, RefreshControl, ScrollView } from 'react-native'
 
 import TabList from '../components/listTab'
 import commonStyles from '../styles/commonStyles'
 import { requestNewsByPage } from '../network'
 import { tabs } from '../seedData'
-import { ScrollView } from 'react-native-gesture-handler'
 import NewsList from '../components/news'
 
-const NewsPage = () => {
-  const [weatherNews, setWeatherNews] = useState([]);
+const NewsPage = ({navigation}) => {
   const [curIdx, setCurIdx] = useState(0)
   const [curField, setCurField] = useState(tabs[0].field)
   const [newsData, setNewsData] = useState({})
+  const [isRefreshing, setIsRefreshing] = useState(false)
   useEffect(() => {
     getNewsByField(curField)
   }, [curField])
@@ -23,7 +22,7 @@ const NewsPage = () => {
       return
     } else {
       console.log("Network Request")
-      requestNewsByPage({ params: { q: field } }).then(res => {
+      requestNewsByPage({ params: { q: field, pageSize: '60' } }).then(res => {
         console.log(res)
         const data = { ...newsData }
         data[field] = res.articles
@@ -35,6 +34,31 @@ const NewsPage = () => {
     setCurIdx(index)
     setCurField(field)
   }
+  const onPageRefresh = React.useCallback(() => {
+    if (isRefreshing) {
+      return
+    }
+
+    setIsRefreshing(true)
+    getNewsByField(curField)
+
+    setTimeout(() => {
+      setIsRefreshing(false)
+    }, 1000)
+  }, [])
+
+  const renderRefreshControl = (options) => {
+    const { isRefreshing, onPageRefresh, backgroundColor, progressViewOffset } = options
+
+    return (
+      <RefreshControl
+        refreshing={isRefreshing}
+        onRefresh={onPageRefresh}
+        progressBackgroundColor={backgroundColor}
+        progressViewOffset={progressViewOffset}
+      />
+    )
+  }
   return (
     <View style={commonStyles.container}>
       <TabList
@@ -43,12 +67,22 @@ const NewsPage = () => {
         onTabClick={onTabClick}
       />
       <ScrollView
+        automaticallyAdjustContentInsets={false}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          renderRefreshControl({
+            isRefreshing,
+            onPageRefresh,
+            backgroundColor: "#666",
+            progressViewOffset: 10
+          })
+        }
       >
         {newsData[curField] &&
-        <NewsList
-          newsData={newsData[curField]}
-        />}
+          <NewsList
+            newsData={newsData[curField]}
+            navigation={navigation}
+          />}
       </ScrollView>
     </View>
   )
