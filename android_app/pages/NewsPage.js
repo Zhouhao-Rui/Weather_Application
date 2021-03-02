@@ -5,6 +5,8 @@ import TabList from '../components/listTab'
 import commonStyles from '../styles/commonStyles'
 import { requestNewsByPage } from '../network'
 import { tabs } from '../seedData'
+import { ScrollView } from 'react-native-gesture-handler'
+import NewsList from '../components/news'
 
 const NewsPage = () => {
   const [weatherNews, setWeatherNews] = useState([]);
@@ -40,6 +42,14 @@ const NewsPage = () => {
         curIdx={curIdx}
         onTabClick={onTabClick}
       />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        {newsData[curField] &&
+        <NewsList
+          newsData={newsData[curField]}
+        />}
+      </ScrollView>
     </View>
   )
 }
