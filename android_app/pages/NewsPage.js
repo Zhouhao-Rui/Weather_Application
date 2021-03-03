@@ -7,11 +7,16 @@ import { requestNewsByPage } from '../network'
 import { tabs } from '../seedData'
 import NewsList from '../components/news'
 
-const NewsPage = ({navigation}) => {
+const NewsPage = ({ navigation }) => {
   const [curIdx, setCurIdx] = useState(0)
   const [curField, setCurField] = useState(tabs[0].field)
   const [newsData, setNewsData] = useState({})
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [curPage, setCurPage] = useState({
+    "weather and Ireland": 1,
+    "health and Ireland": 1,
+    "clothes and Ireland": 1,
+  })
   useEffect(() => {
     getNewsByField(curField)
   }, [curField])
@@ -22,7 +27,7 @@ const NewsPage = ({navigation}) => {
       return
     } else {
       console.log("Network Request")
-      requestNewsByPage({ params: { q: field, pageSize: '60' } }).then(res => {
+      requestNewsByPage({ params: { q: field, pageSize: '20' } }).then(res => {
         console.log(res)
         const data = { ...newsData }
         data[field] = res.articles
@@ -59,6 +64,24 @@ const NewsPage = ({navigation}) => {
       />
     )
   }
+
+  const contentViewScroll = (e) => {
+    const offsetY = e.nativeEvent.contentOffset.y; //滑动距离
+    const contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
+    const oriageScrollHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
+    if ((offsetY + oriageScrollHeight >= contentSizeHeight - 1) && curPage[curField] <= 3) {
+      // load the next page data
+      requestNewsByPage({ params: { q: curField, pageSize: '20', page: curPage[curField] + 1 } }).then(res => {
+        const data = { ...newsData }
+        data[curField] = data[curField].concat(res.articles)
+        setNewsData(data)
+        const page = { ...curPage }
+        page[curField] = page[curField] + 1
+        setCurPage(page)
+        console.log('curPage', curPage)
+      })
+    }
+  }
   return (
     <View style={commonStyles.container}>
       <TabList
@@ -69,6 +92,7 @@ const NewsPage = ({navigation}) => {
       <ScrollView
         automaticallyAdjustContentInsets={false}
         showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd={e => contentViewScroll(e)}
         refreshControl={
           renderRefreshControl({
             isRefreshing,
