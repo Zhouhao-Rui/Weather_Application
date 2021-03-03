@@ -20,11 +20,11 @@ const WeatherList = ({ dayweather, hourweather, currentWeather, currentLocation 
   }, [currentWeather, currentLocation])
   selectBackground = () => {
     // from the date time and the weather
-      if (weatherdescription.includes("rainy") || weatherdescription.includes("rain")) {
+      if (weatherdescription.includes("rainy") || weatherdescription.includes("rain") || weatherdescription.includes("Rain") || weatherdescription.includes("Rainy")) {
         setBackgroundUri(Images.rainy)
-      } else if (weatherdescription.includes("sun") || weatherdescription.includes("sunny")) {
+      } else if (weatherdescription.includes("sun") || weatherdescription.includes("sunny") || weatherdescription.includes("Sunny") || weatherdescription.includes("Sun")) {
         setBackgroundUri(Images.sunny)
-      } else if (weatherdescription.includes("cloudy") || weatherdescription.includes("cloud")) {
+      } else if (weatherdescription.includes("cloudy") || weatherdescription.includes("cloud") || weatherdescription.includes("Cloud") || weatherdescription.includes("Cloudy")) {
         setBackgroundUri(Images.cloudy)
       } else {
         setBackgroundUri(Images.sunny)

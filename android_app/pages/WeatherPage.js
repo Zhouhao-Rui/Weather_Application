@@ -9,6 +9,8 @@ import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
 import FadeInView from '../components/fadeIn';
+import {useDispatch, useSelector} from 'react-redux'
+import {changeCurrentWeatherAction} from '../components/weatherStore/actionCreators'
 
 const HomePage = ({ route, navigation }) => {
   const [initialPosition, setInitialPosition] = useState("52.259319,-7.110070")
@@ -23,6 +25,7 @@ const HomePage = ({ route, navigation }) => {
       requestLocalPermission()
     }
   }, [])
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       console.log(route.params)
@@ -34,6 +37,7 @@ const HomePage = ({ route, navigation }) => {
           setDayWeather(res.forecast.forecastday)
           setCurrentWeather(res.current)
           setCurrentLocation(res.location)
+          dispatch(changeCurrentWeatherAction(res.current))
         }).catch(err => console.log(err))
       } 
       else {
@@ -43,6 +47,7 @@ const HomePage = ({ route, navigation }) => {
           setDayWeather(res.forecast.forecastday)
           setCurrentWeather(res.current)
           setCurrentLocation(res.location)
+          dispatch(changeCurrentWeatherAction(res.current))
         })
       }
     }

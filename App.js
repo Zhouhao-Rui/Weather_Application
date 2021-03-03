@@ -12,7 +12,8 @@ import Firebase from '@react-native-firebase/app'
 import {
   View,
 } from 'react-native';
-
+import store from './android_app/store'
+import { Provider } from 'react-redux'
 
 import TxComp from './android_app/TxComp'
 
@@ -75,7 +76,9 @@ const App = () => {
 
   }
   return (
-    <TxComp />
+    <Provider store={store}>
+      <TxComp />
+    </Provider>
   );
 };
 

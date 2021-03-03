@@ -50,6 +50,10 @@ const NewsPage = ({ navigation }) => {
     setTimeout(() => {
       setIsRefreshing(false)
     }, 1000)
+
+    const page = { ...curPage }
+    page[curField] = 1
+    setCurPage(page)
   }, [])
 
   const renderRefreshControl = (options) => {
@@ -66,6 +70,7 @@ const NewsPage = ({ navigation }) => {
   }
 
   const contentViewScroll = (e) => {
+    // console.log(e.nativeEvent);
     const offsetY = e.nativeEvent.contentOffset.y; //滑动距离
     const contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
     const oriageScrollHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
