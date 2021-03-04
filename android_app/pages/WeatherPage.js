@@ -9,8 +9,11 @@ import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
 import FadeInView from '../components/fadeIn';
-import {useDispatch, useSelector} from 'react-redux'
-import {changeCurrentWeatherAction} from '../components/weatherStore/actionCreators'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeCurrentWeatherAction } from '../components/weatherStore/actionCreators'
+import PushNotification from 'react-native-push-notification'
+import pushNotificationByWeatherCondition from '../utils/pushNotification'
+import Firebase from '@react-native-firebase/app'
 
 const HomePage = ({ route, navigation }) => {
   const [initialPosition, setInitialPosition] = useState("52.259319,-7.110070")
@@ -25,6 +28,29 @@ const HomePage = ({ route, navigation }) => {
       requestLocalPermission()
     }
   }, [])
+  useEffect(() => {
+    // Must be outside of any component LifeCycle (such as `componentDidMount`).
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        console.log("TOKEN:", token);
+      },
+
+      // (required) Called when a remote is received or opened, or local notification is opened
+      onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);
+      },
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+
+      requestPermissions: true,
+    });
+    createChannel();
+  }, [])
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -32,20 +58,22 @@ const HomePage = ({ route, navigation }) => {
       console.log(initialPosition)
       // find the current city weather condition
       if (!route.params) {
-        requestWeather({params: {q: initialPosition, days: 7}}).then(res => {
+        requestWeather({ params: { q: initialPosition, days: 7 } }).then(res => {
           setHourWeather(res.forecast.forecastday[0].hour)
           setDayWeather(res.forecast.forecastday)
           setCurrentWeather(res.current)
+          pushNotificationByWeatherCondition(res.current)
           setCurrentLocation(res.location)
           dispatch(changeCurrentWeatherAction(res.current))
         }).catch(err => console.log(err))
-      } 
+      }
       else {
-        requestWeather({params: {q: route.params.city, days: 7}}).then(res => {
+        requestWeather({ params: { q: route.params.city, days: 7 } }).then(res => {
           console.log(res)
           setHourWeather(res.forecast.forecastday[0].hour)
           setDayWeather(res.forecast.forecastday)
           setCurrentWeather(res.current)
+          pushNotificationByWeatherCondition(res.current)
           setCurrentLocation(res.location)
           dispatch(changeCurrentWeatherAction(res.current))
         })
@@ -53,6 +81,21 @@ const HomePage = ({ route, navigation }) => {
     }
     fetchData()
   }, [route.params])
+
+  const createChannel = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "com.pushnotification", // (required)
+        channelName: "com.pushnotification", // (required)
+        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+        playSound: true, // (optional) default: true
+        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+        importance: 4, // (optional) default: 4. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+      },
+      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    );
+  }
 
   requestLocalPermission = async () => {
     if (Platform.OS === 'android') {

@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage'
 import WhiteBoardPage from './pages/WhiteboardPage'
 import NewsPage from './pages/NewsPage'
 import WebPage from './pages/WebPage'
+import LoginPage from './pages/LoginPage'
 
 import Logo from './components/logo'
 import MapPage from './pages/MapPage'
@@ -68,6 +69,7 @@ const TxComp = () => {
         Tab: 一个屏幕，多个场景切换
          */}
       <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: props => <Logo {...props} />}} />
         <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
         <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
         <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
