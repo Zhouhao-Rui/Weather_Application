@@ -14,11 +14,14 @@ import store from './android_app/store'
 import { Provider } from 'react-redux'
 
 import TxComp from './android_app/TxComp'
+import AuthProvider from './android_app/contexts/authContext'
 
 const App = () => {
   return (
     <Provider store={store}>
-      <TxComp />
+      <AuthProvider>
+        <TxComp />
+      </AuthProvider>
     </Provider>
   );
 };

@@ -1,11 +1,12 @@
-import React, {useEffect} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { Formik } from 'formik'
 import { TouchableHighlight } from 'react-native-gesture-handler'
 import {useAuth} from '../contexts/authContext'
 
-const LoginPage = ({navigation}) => {
-  const {signin, currentUser} = useAuth()
+const RegisterPage = ({navigation}) => {
+  const {signup} = useAuth();
+
   const validate = values => {
     const errors = {}
     if (!values.email) {
@@ -21,26 +22,24 @@ const LoginPage = ({navigation}) => {
     }
     return errors
   }
-  useEffect(() => {
-    console.log(currentUser)
-  }, [])
+
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
       validate={validate}
       onSubmit={async values => {
         try {
-          await signin(values.email, values.password)
-          console.log("Login success")
-          navigation.navigate("Tab")
+          await signup(values.email, values.password)
+          console.log('Create a User')
+          navigation.navigate("Login")
         } catch {
-          console.log('Fail to login')
+          console.log('Fail to create a user')
         }
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
         <View style={styles.container}>
-          <Text style={styles.title}>Login Page</Text>
+          <Text style={styles.title}>Register Page</Text>
           <View style={styles.inputView}>
             <Text style={styles.label}>Email: </Text>
             <TextInput
@@ -70,7 +69,7 @@ const LoginPage = ({navigation}) => {
           <TouchableHighlight style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableHighlight>
-          <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => {navigation.navigate("Register")}}>resigter now</Text></Text>
+          <Text style={styles.bottomText}>Already reigstered? <Text style={styles.bottomLink}>Login now</Text></Text>
         </View>
       )}
     </Formik>
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
-    marginTop: 80,
+    marginTop: 40,
   },
   buttonText: {
     backgroundColor: '#23b8ff',
@@ -131,4 +130,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginPage
+export default RegisterPage
