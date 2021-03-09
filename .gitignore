@@ -62,5 +62,5 @@ buck-out/
 .env
 
 #android and ios
-android
-ios
+/android
+/ios
