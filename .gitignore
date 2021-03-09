@@ -60,3 +60,7 @@ buck-out/
 
 # environment
 .env
+
+#android and ios
+/android
+/ios
