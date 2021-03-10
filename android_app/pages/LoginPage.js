@@ -3,6 +3,7 @@ import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { Formik } from 'formik'
 import { TouchableHighlight } from 'react-native-gesture-handler'
 import {useAuth} from '../contexts/authContext'
+import firestore from '@react-native-firebase/firestore'
 
 const LoginPage = ({navigation}) => {
   const {signin, currentUser} = useAuth()
@@ -21,9 +22,6 @@ const LoginPage = ({navigation}) => {
     }
     return errors
   }
-  useEffect(() => {
-    console.log(currentUser)
-  }, [])
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
@@ -32,7 +30,12 @@ const LoginPage = ({navigation}) => {
         try {
           await signin(values.email, values.password)
           console.log("Login success")
-          navigation.navigate("Tab")
+          /**
+           * if login success and the user didn't exist in the cloud firestore, then 
+           * navigate to the data collection page
+           */
+          const user = await firestore().collection('Users').doc(currentUser.uid).get()
+          user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
         } catch {
           console.log('Fail to login')
         }
