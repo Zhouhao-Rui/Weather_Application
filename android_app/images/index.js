@@ -25,6 +25,19 @@ const images = {
   Tullamore: require('../assets/img/citys/Tullamore.jpg'),
   Waterville: require('../assets/img/citys/Waterville.jpg'),
   Westport: require('../assets/img/citys/Westport.jpg'),
+  hoodies: require('../assets/img/clothes/hoodies.jpg'),
+  hoodies_w: require('../assets/img/clothes/hoodies_w.jpg'),
+  dress: require('../assets/img/clothes/dress.jpg'),
+  shirt: require('../assets/img/clothes/shirt.jpg'),
+  jacket: require('../assets/img/clothes/jacket.jpg'),
+  jacket_w: require('../assets/img/clothes/jacket_w.jpg'),
+  coat: require('../assets/img/clothes/coat.jpg'),
+  coat_w: require('../assets/img/clothes/coat_w.jpg'),
+  long_trouseres: require('../assets/img/trouses/long.jpg'),
+  long_trouseres_w: require('../assets/img/trouses/long_w.jpg'),
+  short_trouseres: require('../assets/img/trouses/short.jpg'),
+  jeans: require('../assets/img/trouses/jeans.jpg'),
+  skirt: require('../assets/img/trouses/skirt.jpg')
 }
 
 export default images
