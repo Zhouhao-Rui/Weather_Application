@@ -15,10 +15,10 @@ import RegisterPage from './pages/RegisterPage'
 import Logo from './components/logo'
 import MapPage from './pages/MapPage'
 import InfoCollectionPage from './pages/InfoCollectionPage'
+import {useAuth} from './contexts/authContext'
 
 const ButtomTab = () => {
   const Tab = createBottomTabNavigator()
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -63,6 +63,7 @@ const ButtomTab = () => {
 
 const TxComp = () => {
   const Stack = createStackNavigator()
+  const {currentUser} = useAuth()
 
   return (
     <NavigationContainer>
@@ -71,12 +72,17 @@ const TxComp = () => {
         Tab: 一个屏幕，多个场景切换
          */}
       <Stack.Navigator>
+        {!currentUser.uid ? 
+        <>
         <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: props => <Logo {...props} />}} />
         <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: props => <Logo {...props} />}} /> 
         <Stack.Screen name="Info" component={InfoCollectionPage} options={{headerTitle: props => <Logo {...props} />}} />
+        </> : <>
         <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
         <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
         <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+        </>} 
+        
       </Stack.Navigator>
     </NavigationContainer>
   )

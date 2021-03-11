@@ -7,11 +7,16 @@ import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button'
 
 import images from '../images'
 
+import {useAuth} from '../contexts/authContext'
+
+import firestore from '@react-native-firebase/firestore'
+
 const InfoCollectionPage = () => {
   const [gender, setGender] = useState('male')
   const [clothes, setClothes] = useState('coat')
   const [trouseres, setTrouseres] = useState('jeans')
   const [dieases, setDieases] = useState('')
+  const {currentUser} = useAuth()
   const onSelectGender = (index, val) => {
     setGender(val)
   }
@@ -25,6 +30,23 @@ const InfoCollectionPage = () => {
 
   const OnSelectDieases = (index, val) => {
     setDieases(val)
+  }
+
+  const handleSubmit = ({navigation}) => {
+    firestore().collection('Users')
+    .doc(currentUser.uid)
+    .set({
+      email: currentUser.email,
+      gender,
+      clothes,
+      trouseres,
+      dieases
+    })
+    .then(() => {
+      navigation.navigate('Tab')
+    }).catch((err) => {
+      console.log(err)
+    })
   }
   return (
     <Swiper showsButtons={true}>
@@ -216,7 +238,7 @@ const InfoCollectionPage = () => {
           </RadioButton>
         </RadioGroup>
 
-        <TouchableHighlight style={styles.button}>
+        <TouchableHighlight style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableHighlight>
       </View>
