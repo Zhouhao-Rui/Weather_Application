@@ -195,14 +195,14 @@ const InfoCollectionPage = ({navigation}) => {
               <RadioButton value={'jeans'} >
                 <Image
                   style={{ width: 100, height: 100 }}
-                  source={images.long_trouseres_w}
+                  source={images.jeans}
                 />
               </RadioButton>
 
-              <RadioButton value={'long_trouseres_w'}>
+              <RadioButton value={'long_trouseres'}>
                 <Image
                   style={{ width: 100, height: 100 }}
-                  source={images.short_trouseres}
+                  source={images.long_trouseres_w}
                 />
               </RadioButton>
 

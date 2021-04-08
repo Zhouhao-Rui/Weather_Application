@@ -100,6 +100,10 @@ const TxComp = () => {
               <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
             </>
           )}
+
+        {/* <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
+        <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+        <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   )

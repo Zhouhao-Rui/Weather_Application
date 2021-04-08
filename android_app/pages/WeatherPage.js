@@ -9,7 +9,7 @@ import WeatherList from '../components/weather/weatherlist'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { ScrollView } from 'react-native-gesture-handler';
 import FadeInView from '../components/fadeIn';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { changeCurrentWeatherAction } from '../components/weatherStore/actionCreators'
 import PushNotification from 'react-native-push-notification'
 import pushNotificationByWeatherCondition from '../utils/pushNotification'

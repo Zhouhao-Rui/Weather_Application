@@ -5991,6 +5991,13 @@ react-native-dotenv@^2.5.3:
   dependencies:
     dotenv "^8.0.0"
 
+react-native-draggable@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-draggable/-/react-native-draggable-3.3.0.tgz#6f07c3ad4cff018bf0455fc48dbfe5f0af9b72cd"
+  integrity sha512-aU20CaKBmzXrwE9eTJZ+GDOr52mXLchg5Vydbx5rz8nYXlN+ppHIoTPgyXduyWNwpZ/DR6tyFtMwdgUHpuN6oA==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-flexi-radio-button@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-native-flexi-radio-button/-/react-native-flexi-radio-button-0.2.2.tgz#a0180393c531ba3477722c6e42a31ceb1c11623b"
