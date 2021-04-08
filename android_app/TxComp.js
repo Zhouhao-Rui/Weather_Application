@@ -15,7 +15,8 @@ import RegisterPage from './pages/RegisterPage'
 import Logo from './components/logo'
 import MapPage from './pages/MapPage'
 import InfoCollectionPage from './pages/InfoCollectionPage'
-import {useAuth} from './contexts/authContext'
+import { useAuth } from './contexts/authContext'
+import firestore from '@react-native-firebase/firestore'
 
 const ButtomTab = () => {
   const Tab = createBottomTabNavigator()
@@ -63,8 +64,19 @@ const ButtomTab = () => {
 
 const TxComp = () => {
   const Stack = createStackNavigator()
-  const {currentUser} = useAuth()
+  // currentUser
+  const { currentUser } = useAuth()
+  const [userData, setUserData] = useState([])
+  useEffect(() => {
+    FindUserData()
+  }, [])
 
+  const FindUserData = async () => {
+    const user = await firestore().collection('Users').doc(currentUser.uid).get()
+    if (user.data()) {
+      setUserData(user.data())
+    }
+  }
   return (
     <NavigationContainer>
       {/* 
@@ -72,17 +84,22 @@ const TxComp = () => {
         Tab: 一个屏幕，多个场景切换
          */}
       <Stack.Navigator>
-        {!currentUser.uid ? 
-        <>
-        <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: props => <Logo {...props} />}} />
-        <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: props => <Logo {...props} />}} /> 
-        <Stack.Screen name="Info" component={InfoCollectionPage} options={{headerTitle: props => <Logo {...props} />}} />
-        </> : <>
-        <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
-        <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
-        <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
-        </>} 
-        
+        {(currentUser && userData.length) ? (
+          <>
+            <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
+            <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+            <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+          </>
+        ) : (
+            <>
+              <Stack.Screen name="Login" component={LoginPage} options={{ headerTitle: props => <Logo {...props} /> }} />
+              <Stack.Screen name="Register" component={RegisterPage} options={{ headerTitle: props => <Logo {...props} /> }} />
+              <Stack.Screen name="Info" component={InfoCollectionPage} options={{ headerTitle: props => <Logo {...props} /> }} />
+              <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
+              <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+              <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+            </>
+          )}
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { Formik } from 'formik'
 import { TouchableHighlight } from 'react-native-gesture-handler'
-import {useAuth} from '../contexts/authContext'
+import { useAuth } from '../contexts/authContext'
 import firestore from '@react-native-firebase/firestore'
 
-const LoginPage = ({navigation}) => {
-  const {signin, currentUser} = useAuth()
+const LoginPage = ({ navigation }) => {
+  const { signin, currentUser } = useAuth()
   const validate = values => {
     const errors = {}
     if (!values.email) {
@@ -14,10 +14,10 @@ const LoginPage = ({navigation}) => {
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
       errors.email = "Invalid email address"
     }
-    
+
     if (!values.password) {
       errors.password = "password is required"
-    }else if (!values.password.length > 6) {
+    } else if (!values.password.length > 6) {
       errors.password = "Must be 6 chars or more"
     }
     return errors
@@ -30,14 +30,18 @@ const LoginPage = ({navigation}) => {
         try {
           await signin(values.email, values.password)
           console.log("Login success")
-          /**
-           * if login success and the user didn't exist in the cloud firestore, then 
-           * navigate to the data collection page
-           */
-          const user = await firestore().collection('Users').doc(currentUser.uid).get()
-          user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
         } catch {
           console.log('Fail to login')
+        }
+        try {
+          /**
+            * if login success and the user didn't exist in the cloud firestore, then 
+            * navigate to the data collection page
+          */
+          const user = await firestore().collection('Users').doc(currentUser.uid).get()
+          user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
+        } catch (err) {
+          console.log('Fail to collect info')
         }
       }}
     >
@@ -61,6 +65,7 @@ const LoginPage = ({navigation}) => {
             <Text style={styles.label}>Pass: </Text>
             <TextInput
               style={styles.input}
+              secureTextEntry={true}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
@@ -73,7 +78,7 @@ const LoginPage = ({navigation}) => {
           <TouchableHighlight style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableHighlight>
-          <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => {navigation.navigate("Register")}}>resigter now</Text></Text>
+          <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => { navigation.navigate("Register") }}>resigter now</Text></Text>
         </View>
       )}
     </Formik>

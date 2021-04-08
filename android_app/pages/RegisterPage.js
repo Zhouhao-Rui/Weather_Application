@@ -58,6 +58,7 @@ const RegisterPage = ({navigation}) => {
             <TextInput
               style={styles.input}
               onChangeText={handleChange('password')}
+              secureTextEntry={true}
               onBlur={handleBlur('password')}
               value={values.password}
               underlineColorAndroid="transparent"

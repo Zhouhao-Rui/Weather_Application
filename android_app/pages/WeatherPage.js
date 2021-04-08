@@ -97,7 +97,7 @@ const HomePage = ({ route, navigation }) => {
     );
   }
 
-  requestLocalPermission = async () => {
+  const requestLocalPermission = async () => {
     if (Platform.OS === 'android') {
       var response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
       console.log('Android', response)
@@ -109,7 +109,7 @@ const HomePage = ({ route, navigation }) => {
       return
     }
   }
-  locateCurrentLocation = () => {
+  const locateCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         console.log(JSON.stringify(position))

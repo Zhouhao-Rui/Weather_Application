@@ -11,7 +11,7 @@ import {useAuth} from '../contexts/authContext'
 
 import firestore from '@react-native-firebase/firestore'
 
-const InfoCollectionPage = () => {
+const InfoCollectionPage = ({navigation}) => {
   const [gender, setGender] = useState('male')
   const [clothes, setClothes] = useState('coat')
   const [trouseres, setTrouseres] = useState('jeans')
@@ -32,7 +32,7 @@ const InfoCollectionPage = () => {
     setDieases(val)
   }
 
-  const handleSubmit = ({navigation}) => {
+  const handleSubmit = () => {
     firestore().collection('Users')
     .doc(currentUser.uid)
     .set({
@@ -192,14 +192,14 @@ const InfoCollectionPage = () => {
               selectedIndex={0}
               onSelect={(index, value) => onSelectTrouseres(index, value)}
             >
-              <RadioButton value={'long_trouseres'} >
+              <RadioButton value={'jeans'} >
                 <Image
                   style={{ width: 100, height: 100 }}
                   source={images.long_trouseres_w}
                 />
               </RadioButton>
 
-              <RadioButton value={'short_trouseres'}>
+              <RadioButton value={'long_trouseres_w'}>
                 <Image
                   style={{ width: 100, height: 100 }}
                   source={images.short_trouseres}
