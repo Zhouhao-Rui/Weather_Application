@@ -84,7 +84,7 @@ const TxComp = () => {
         Tab: 一个屏幕，多个场景切换
          */}
       <Stack.Navigator>
-        {/* {(currentUser && userData.length) ? (
+        {(currentUser && userData.length) ? (
           <>
             <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
             <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
@@ -99,11 +99,11 @@ const TxComp = () => {
               <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
               <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
             </>
-          )} */}
+          )}
 
-        <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
+        {/* <Stack.Screen name="Tab" component={ButtomTab} options={{ headerTitle: props => <Logo {...props} /> }} />
         <Stack.Screen name="Detail" component={MapPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
-        <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} />
+        <Stack.Screen name="Web" component={WebPage} options={{ headerTitle: props => <Logo {...props} />, headerBackTitle: "Return" }} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   )
