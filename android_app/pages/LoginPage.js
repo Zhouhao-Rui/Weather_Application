@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { Formik } from 'formik'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useAuth } from '../contexts/authContext'
 import firestore from '@react-native-firebase/firestore'
 
@@ -75,9 +75,9 @@ const LoginPage = ({ navigation }) => {
             />
           </View>
           <Text style={styles.errorText}>{errors.password}</Text>
-          <TouchableHighlight style={styles.button} onPress={handleSubmit}>
+          <TouchableWithoutFeedback style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
-          </TouchableHighlight>
+          </TouchableWithoutFeedback>
           <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => { navigation.navigate("Register") }}>resigter now</Text></Text>
         </View>
       )}

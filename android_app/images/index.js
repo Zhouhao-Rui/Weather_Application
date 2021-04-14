@@ -25,19 +25,19 @@ const images = {
   Tullamore: require('../assets/img/citys/Tullamore.jpg'),
   Waterville: require('../assets/img/citys/Waterville.jpg'),
   Westport: require('../assets/img/citys/Westport.jpg'),
-  hoodies: require('../assets/img/clothes/hoodies.jpg'),
-  hoodies_w: require('../assets/img/clothes/hoodies_w.jpg'),
-  dress: require('../assets/img/clothes/dress.jpg'),
-  shirt: require('../assets/img/clothes/shirt.jpg'),
-  jacket: require('../assets/img/clothes/jacket.jpg'),
-  jacket_w: require('../assets/img/clothes/jacket_w.jpg'),
-  coat: require('../assets/img/clothes/coat.jpg'),
-  coat_w: require('../assets/img/clothes/coat_w.jpg'),
-  long_trouseres: require('../assets/img/trouses/long.jpg'),
-  long_trouseres_w: require('../assets/img/trouses/long_w.jpg'),
-  short_trouseres: require('../assets/img/trouses/short.jpg'),
-  jeans: require('../assets/img/trouses/jeans.jpg'),
-  skirt: require('../assets/img/trouses/skirt.jpg')
+  hoodies: require('../assets/img/clothes/hoodies.png'),
+  hoodies_w: require('../assets/img/clothes/hoodies_w.png'),
+  dress: require('../assets/img/clothes/dress.png'),
+  shirt: require('../assets/img/clothes/shirt.png'),
+  jacket: require('../assets/img/clothes/jacket.png'),
+  jacket_w: require('../assets/img/clothes/jacket_w.png'),
+  coat: require('../assets/img/clothes/coat.png'),
+  coat_w: require('../assets/img/clothes/coat_w.png'),
+  long_trouseres: require('../assets/img/trouses/long.png'),
+  long_trouseres_w: require('../assets/img/trouses/long_w.png'),
+  short_trouseres: require('../assets/img/trouses/short.png'),
+  jeans: require('../assets/img/trouses/jeans.png'),
+  skirt: require('../assets/img/trouses/skirt.png')
 }
 
 export default images

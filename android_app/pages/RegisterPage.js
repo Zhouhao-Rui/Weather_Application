@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { Formik } from 'formik'
-import { TouchableHighlight } from 'react-native-gesture-handler'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import {useAuth} from '../contexts/authContext'
 
 const RegisterPage = ({navigation}) => {
@@ -67,9 +67,9 @@ const RegisterPage = ({navigation}) => {
             />
           </View>
           <Text style={styles.errorText}>{errors.password}</Text>
-          <TouchableHighlight style={styles.button} onPress={handleSubmit}>
+          <TouchableWithoutFeedback style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
-          </TouchableHighlight>
+          </TouchableWithoutFeedback>
           <Text style={styles.bottomText}>Already reigstered? <Text style={styles.bottomLink}>Login now</Text></Text>
         </View>
       )}
