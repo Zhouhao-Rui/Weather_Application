@@ -4,9 +4,17 @@ import { Formik } from 'formik'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useAuth } from '../contexts/authContext'
 import firestore from '@react-native-firebase/firestore'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { CLIENT_ID } from "@env"
+import SocialButton from '../components/socialButton'
 
 const LoginPage = ({ navigation }) => {
-  const { signin, currentUser } = useAuth()
+  const { signin, currentUser, googleLogin } = useAuth()
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: CLIENT_ID,
+    });
+  }, [])
   const validate = values => {
     const errors = {}
     if (!values.email) {
@@ -22,66 +30,87 @@ const LoginPage = ({ navigation }) => {
     }
     return errors
   }
+  const googleAuth = async () => {
+    await googleLogin();
+    try {
+      /**
+        * if login success and the user didn't exist in the cloud firestore, then 
+        * navigate to the data collection page
+      */
+      const user = await firestore().collection('Users').doc(currentUser.uid).get()
+      user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
+    } catch (err) {
+      console.log('Fail to collect info')
+    }
+
+  }
   return (
-    <Formik
-      initialValues={{ email: '', password: '' }}
-      validate={validate}
-      onSubmit={async values => {
-        try {
-          await signin(values.email, values.password)
-          console.log("Login success")
-        } catch {
-          console.log('Fail to login')
-        }
-        try {
-          /**
-            * if login success and the user didn't exist in the cloud firestore, then 
-            * navigate to the data collection page
-          */
-          const user = await firestore().collection('Users').doc(currentUser.uid).get()
-          user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
-        } catch (err) {
-          console.log('Fail to collect info')
-        }
-      }}
-    >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-        <View style={styles.container}>
-          <Text style={styles.title}>Login Page</Text>
-          <View style={styles.inputView}>
-            <Text style={styles.label}>Email: </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              underlineColorAndroid="transparent"
-              placeholder={"your email"}
-              placeholderTextColor="#9a73ef"
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validate={validate}
+        onSubmit={async values => {
+          try {
+            await signin(values.email, values.password)
+            console.log("Login success")
+          } catch {
+            console.log('Fail to login')
+          }
+          try {
+            /**
+              * if login success and the user didn't exist in the cloud firestore, then 
+              * navigate to the data collection page
+            */
+            const user = await firestore().collection('Users').doc(currentUser.uid).get()
+            user.data() ? navigation.navigate("Tab") : navigation.navigate("Info");
+          } catch (err) {
+            console.log('Fail to collect info')
+          }
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+          <View style={styles.container}>
+            <Text style={styles.title}>Login Page</Text>
+            <View style={styles.inputView}>
+              <Text style={styles.label}>Email: </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                underlineColorAndroid="transparent"
+                placeholder={"your email"}
+                placeholderTextColor="#9a73ef"
+              />
+            </View>
+            <Text style={styles.errorText}>{errors.email}</Text>
+            <View style={styles.inputView}>
+              <Text style={styles.label}>Pass: </Text>
+              <TextInput
+                style={styles.input}
+                secureTextEntry={true}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                underlineColorAndroid="transparent"
+                placeholder={"password"}
+                placeholderTextColor="#9a73ef"
+              />
+            </View>
+            <Text style={styles.errorText}>{errors.password}</Text>
+            <TouchableWithoutFeedback style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableWithoutFeedback>
+            <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => { navigation.navigate("Register") }}>resigter now</Text></Text>
+            <SocialButton
+              buttonTitle="Google Sign-In"
+              btnType="google"
+              color="#de4d41"
+              backgroundColor="#f5e7ea"
+              onPress={googleAuth}
             />
           </View>
-          <Text style={styles.errorText}>{errors.email}</Text>
-          <View style={styles.inputView}>
-            <Text style={styles.label}>Pass: </Text>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-              underlineColorAndroid="transparent"
-              placeholder={"password"}
-              placeholderTextColor="#9a73ef"
-            />
-          </View>
-          <Text style={styles.errorText}>{errors.password}</Text>
-          <TouchableWithoutFeedback style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Submit</Text>
-          </TouchableWithoutFeedback>
-          <Text style={styles.bottomText}>don't have an account? <Text style={styles.bottomLink} onPress={() => { navigation.navigate("Register") }}>resigter now</Text></Text>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
   )
 }
 

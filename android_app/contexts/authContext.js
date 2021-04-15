@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import auth from '@react-native-firebase/auth'
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const AuthContext = React.createContext()
 
@@ -7,7 +8,7 @@ export const useAuth = () => {
   return useContext(AuthContext)
 }
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState("")
   const [loading, setLoading] = useState(true)
 
@@ -23,6 +24,20 @@ const AuthProvider = ({children}) => {
     return auth().signOut()
   }
 
+  const googleLogin = async () => {
+    try {
+      const { idToken } = await GoogleSignin.signIn()
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(googleCredential);
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     const unsubscriber = auth().onAuthStateChanged(user => {
       setCurrentUser(user)
@@ -36,7 +51,8 @@ const AuthProvider = ({children}) => {
     currentUser,
     signup,
     signin,
-    logout
+    logout,
+    googleLogin
   }
 
   return (
