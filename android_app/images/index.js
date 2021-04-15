@@ -37,7 +37,8 @@ const images = {
   long_trouseres_w: require('../assets/img/trouses/long_w.png'),
   short_trouseres: require('../assets/img/trouses/short.png'),
   jeans: require('../assets/img/trouses/jeans.png'),
-  skirt: require('../assets/img/trouses/skirt.png')
+  skirt: require('../assets/img/trouses/skirt.png'),
+  avatar: require('../assets/img/avatar.jpg')
 }
 
 export default images
