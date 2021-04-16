@@ -29,6 +29,7 @@ const HomePage = ({ route, navigation }) => {
     }
   }, [])
   useEffect(() => {
+    Firebase.initializeApp();
     // Must be outside of any component LifeCycle (such as `componentDidMount`).
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
