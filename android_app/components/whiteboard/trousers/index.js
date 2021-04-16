@@ -6,16 +6,8 @@ import { View, Text } from 'react-native'
 
 const TrousersList = (props) => {
   const { changeTrousers, gender } = props
-  const [size, setSize] = useState({
-    first: 80,
-    second: 80,
-    third: 80,
-  })
-  const [disableList, setDisableList] = useState({
-    first: false,
-    second: false,
-    third: false,
-  })
+  const [size, setSize] = useState([80, 80, 80])
+  const [disableList, setDisableList] = useState([false, false, false])
   return (
     <View>
       <Text style={{marginLeft: 20, fontSize: 15, fontWeight: "bold", color: "#CD853F", marginTop: 320}}>Trousers</Text>

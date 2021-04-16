@@ -18,13 +18,13 @@ const ProfilePage = ({ navigation }) => {
     fetchUserInfo()
   }, [])
   const fetchUserInfo = async () => {
-    const user = await firestore().collection('Users').doc(currentUser.uid).get()
-    setUserData(user.data())
+    const user = await (await firestore().collection('Users').doc(currentUser.uid).get()).data()
+    setUserData(user)
     const uri = await storage().ref(`${currentUser.uid}`).getDownloadURL()
     setUri(uri)
-    const clothes_uri = await storage().ref(`${currentUser.uid}_${userData.clothes}`).getDownloadURL()
+    const clothes_uri = await storage().ref(`${currentUser.uid}_${user.clothes}`).getDownloadURL()
     setClothesUri(clothes_uri)
-    const trousers_uri = await storage().ref(`${currentUser.uid}_${userData.trouseres}`).getDownloadURL()
+    const trousers_uri = await storage().ref(`${currentUser.uid}_${user.trouseres}`).getDownloadURL()
     setTrousersUri(trousers_uri)
   }
   const handleChoosePhoto = () => {

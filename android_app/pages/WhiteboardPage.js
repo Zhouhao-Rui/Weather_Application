@@ -157,8 +157,8 @@ const WhiteBoardPage = () => {
   }
   return (
     <View style={{ backgroundColor: '#F0FFFF', height: Dimensions.get("window").height }}>
-      <ClotheList changeClothes={changeClothes} gender="female" />
-      <TrousersList changeTrousers={changeTrousers} gender="female" />
+      <ClotheList changeClothes={changeClothes} gender={userData.gender} />
+      <TrousersList changeTrousers={changeTrousers} gender={userData.gender} />
       <View style={styles.showArea}>
         <TouchableWithoutFeedback style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>

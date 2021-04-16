@@ -83,10 +83,10 @@ const InfoCollectionPage = ({navigation}) => {
             selectedIndex={0}
             onSelect={(index, value) => onSelectClothes(index, value)}
           >
-            <RadioButton value={'hoodies'} >
+            <RadioButton value={'hoodie'} >
               <Image
                 style={{ width: 100, height: 100 }}
-                source={images.hoodies}
+                source={images.hoodie}
               />
             </RadioButton>
 
@@ -120,10 +120,10 @@ const InfoCollectionPage = ({navigation}) => {
               selectedIndex={0}
               onSelect={(index, value) => onSelectClothes(index, value)}
             >
-              <RadioButton value={'hoodies'} >
+              <RadioButton value={'hoodie'} >
                 <Image
                   style={{ width: 100, height: 100 }}
-                  source={images.hoodies_w}
+                  source={images.hoodie_w}
                 />
               </RadioButton>
 
@@ -165,14 +165,14 @@ const InfoCollectionPage = ({navigation}) => {
             <RadioButton value={'long_trouseres'} >
               <Image
                 style={{ width: 100, height: 100 }}
-                source={images.long_trouseres}
+                source={images.long}
               />
             </RadioButton>
 
             <RadioButton value={'short_trouseres'}>
               <Image
                 style={{ width: 100, height: 100 }}
-                source={images.short_trouseres}
+                source={images.short}
               />
             </RadioButton>
 
@@ -202,7 +202,7 @@ const InfoCollectionPage = ({navigation}) => {
               <RadioButton value={'long_trouseres'}>
                 <Image
                   style={{ width: 100, height: 100 }}
-                  source={images.long_trouseres_w}
+                  source={images.long_w}
                 />
               </RadioButton>
 

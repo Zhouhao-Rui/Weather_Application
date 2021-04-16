@@ -1,75 +1,87 @@
-import React, { useState } from 'react'
-import { View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image } from 'react-native'
 import images from '../../../images/index'
 import Draggable from 'react-native-draggable'
+import storage from '@react-native-firebase/storage'
+import { useAuth } from '../../../contexts/authContext'
+import firestore from '@react-native-firebase/firestore'
 
 const DragItems = (props) => {
+  const {currentUser} = useAuth()
   const {changeTrousers, gender, name, setSize, setDisableList, size, disableList} = props
+  const [trousersUri, setTrousersUri] = useState("")
+  const [trousers, setTrousers] = useState("")
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+  const fetchUserData = async () => {
+    const userData = await (await firestore().collection('Users').doc(currentUser.uid).get()).data()
+    setTrousers(userData.trouseres)
+    const trousers_uri = await storage().ref(`${currentUser.uid}_${userData.trouseres}`).getDownloadURL()
+    setTrousersUri(trousers_uri)
+  }
   return (
     <View>
-       <Draggable
-        imageSource={gender == 'male' ? images.jeans : images.jeans}
-        renderSize={size.first}
-        x={10}
-        y={10}
-        disabled={disableList.first}
-        onDragRelease={(e) => {
-          if ((e.nativeEvent.pageX - e.nativeEvent.locationX > 70) &&
-            (e.nativeEvent.pageX - e.nativeEvent.locationX < 320) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY > 50) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY < 550)) {
-            setSize({ first: 150, second: 60, third: 60 })
-            setDisableList({ first: false, second: true, third: true})
-            changeTrousers(name[0])
-          } else {
-            setSize({ first: 60, second: 60, third: 60 })
-            setDisableList({ first: false, second: false, third: false })
-            changeTrousers("")
-          }
-        }}
-      />
-      <Draggable
-        imageSource={gender == 'male' ? images.long_trouseres : images.long_trouseres_w}
-        renderSize={size.second}
-        x={10}
-        y={100}
-        disabled={disableList.second}
-        onDragRelease={(e) => {
-          if ((e.nativeEvent.pageX - e.nativeEvent.locationX > 70) &&
-            (e.nativeEvent.pageX - e.nativeEvent.locationX < 320) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY > 50) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY < 550)) {
-            setSize({ first: 60, second: 150, third: 60, fourth: 60 })
-            setDisableList({ first: true, second: false, third: true })
-            changeTrousers(name[1])
-          } else {
-            setSize({ first: 60, second: 60, third: 60, fourth: 60 })
-            setDisableList({ first: false, second: false, third: false })
-            changeTrousers("")
-          }
-        }}
-      />
-      <Draggable
-        imageSource={gender == 'male' ? images.short_trouseres : images.skirt}
-        renderSize={size.third}
-        x={10}
-        y={180}
-        disabled={disableList.third}
-        onDragRelease={(e) => {
-          if ((e.nativeEvent.pageX - e.nativeEvent.locationX > 70) &&
-            (e.nativeEvent.pageX - e.nativeEvent.locationX < 320) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY > 50) &&
-            (e.nativeEvent.pageY - e.nativeEvent.locationY < 550)) {
-            setSize({ first: 60, second: 60, third: 150, fourth: 60 })
-            setDisableList({ first: true, second: true, third: false })
-            changeTrousers(name[2])
-          } else {
-            setSize({ first: 60, second: 60, third: 60, fourth: 60 })
-            setDisableList({ first: false, second: false, third: false })
-            changeTrousers("")
-          }
-        }}
-      />
+      {name.map((n, index) => {
+        const y = 10 + index * 85
+        if (n == trousers) {
+          return (
+            <Draggable
+              x={10}
+              y={y}
+              disabled={disableList[index]}
+              onDragRelease={e => {
+                if ((e.nativeEvent.pageX - e.nativeEvent.locationX > 50) &&
+                  (e.nativeEvent.pageX - e.nativeEvent.locationX < 300) &&
+                  (e.nativeEvent.pageY - e.nativeEvent.locationY > 50) &&
+                  (e.nativeEvent.pageY - e.nativeEvent.locationY < 550)) {
+                  let copy_size = [...size]
+                  copy_size[index] = 150
+                  setSize(copy_size)
+                  let copy_disableList = [true, true, true, true]
+                  copy_disableList[index] = false
+                  setDisableList(copy_disableList)
+                  changeTrousers(name[index])
+                } else {
+                  setSize([60, 60, 60, 60])
+                  setDisableList([false, false, false, false])
+                  changeTrousers("")
+                }
+              }}
+            >
+              <Image source={{ uri: trousersUri }} style={{ resizeMode: 'contain', height: size[index], width: size[index] }} />
+            </Draggable>
+          )
+        } else {
+          return (
+            <Draggable
+              imageSource={gender == 'male' ? images[name[index]] : images[`${name[index]}_w`]}
+              renderSize={size[index]}
+              x={10}
+              y={y}
+              disabled={disableList[index]}
+              onDragRelease={(e) => {
+                if ((e.nativeEvent.pageX - e.nativeEvent.locationX > 50) &&
+                  (e.nativeEvent.pageX - e.nativeEvent.locationX < 300) &&
+                  (e.nativeEvent.pageY - e.nativeEvent.locationY > 50) &&
+                  (e.nativeEvent.pageY - e.nativeEvent.locationY < 550)) {
+                  let copy_size = [...size]
+                  copy_size[index] = 150
+                  setSize(copy_size)
+                  let copy_disableList = [true, true, true, true]
+                  copy_disableList[index] = false
+                  setDisableList(copy_disableList)
+                  changeTrousers(name[index])
+                } else {
+                  setSize([60, 60, 60, 60])
+                  setDisableList([false, false, false, false])
+                  changeTrousers("")
+                }
+              }}
+            />
+          )
+        }
+      })}
     </View>
   )
 }
