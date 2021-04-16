@@ -30,7 +30,11 @@ My weather application focus on giving advice for the the user with potential he
 
    ![][register]
 
-2. Weather forecast page
+2. Information collection page
+
+   ![][infoCollect]
+
+3. Weather forecast page
 
 ![][weather]
 
@@ -60,4 +64,5 @@ My weather application focus on giving advice for the the user with potential he
 [news2]: ./img/new2.png
 [whiteboard]: ./img/whiteboard.png
 [profile]: ./img/profile.png
+[infoCollect]: ./img/info.png
 
