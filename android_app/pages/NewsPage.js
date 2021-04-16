@@ -6,8 +6,11 @@ import commonStyles from '../styles/commonStyles'
 import { requestNewsByPage } from '../network'
 import { tabs } from '../seedData'
 import NewsList from '../components/news'
+import {useAuth} from '../contexts/authContext'
+import firestore from '@react-native-firebase/firestore'
 
 const NewsPage = ({ navigation }) => {
+  const {currentUser} = useAuth()
   const [curIdx, setCurIdx] = useState(0)
   const [curField, setCurField] = useState(tabs[0].field)
   const [newsData, setNewsData] = useState({})
@@ -18,9 +21,16 @@ const NewsPage = ({ navigation }) => {
     "clothes and Ireland": 1,
   })
   useEffect(() => {
+    getUserInfo()
+  }, [])
+  useEffect(() => {
     getNewsByField(curField)
   }, [curField])
 
+  const getUserInfo = async () => {
+    const userData = await (await firestore().collection('Users').doc(currentUser.uid).get()).data()
+    tabs[1].field.concat(" and " + userData.dieases)
+  }
   const getNewsByField = (field) => {
     if (newsData[field] && newsData[field].length !== 0) {
       console.log('From data pool')
@@ -38,6 +48,7 @@ const NewsPage = ({ navigation }) => {
   const onTabClick = (field, index) => {
     setCurIdx(index)
     setCurField(field)
+    console.log(tabs)
   }
   const onPageRefresh = React.useCallback(() => {
     if (isRefreshing) {
