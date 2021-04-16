@@ -9,6 +9,9 @@ import TrousersList from '../components/whiteboard/trousers'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const WhiteBoardPage = () => {
+  const { current_weather } = useSelector(state => ({
+    current_weather: state.getIn(["weather", "current_weather"])
+  }))
   const [clothes, setClothes] = useState("")
   const [trousers, setTrousers] = useState("")
   const { currentUser } = useAuth()
@@ -24,37 +27,14 @@ const WhiteBoardPage = () => {
     prefer1: 0,
     prefer2: 0
   })
-  const { current_weather } = useSelector(state => ({
-    current_weather: state.getIn(["weather", "current_weather"])
-  }), shallowEqual)
-  const [style, setStyle] = useState('')
-  useEffect(() => {
-    fetchUserInfo()
-    refactorDataFormat(userData, current_weather.condition.text)
-    setWeatherInfo({
-      temp: current_weather.temp_c,
-      weather: weatherCondition,
-      wind: current_weather.current_weather,
-      prefer1: clothesPrefer,
-      prefer2: trousersPrefer
+  const fetchUserInfo = () => {
+    firestore().collection('Users').doc(currentUser.uid).get().then(documentSnapshot => {
+      console.log('User exists: ', documentSnapshot.exists);
+
+      if (documentSnapshot.exists) {
+        setUserData(documentSnapshot.data())
+      }
     })
-    if (userData.gender == 'male') {
-      axios.get('http://120.26.161.157:5000/male', {
-        params: weatherInfo
-      }).then(res => {
-        setStyle(res.data)
-      })
-    } else {
-      axios.get('http://120.26.161.157:5000/female', {
-        params: weatherInfo
-      }).then(res => {
-        setStyle(res.data)
-      })
-    }
-  }, [])
-  const fetchUserInfo = async () => {
-    const user = await firestore().collection('Users').doc(currentUser.uid).get()
-    setUserData(user.data())
   }
   const refactorDataFormat = (userData, condition) => {
     // change the weather condition
@@ -102,6 +82,43 @@ const WhiteBoardPage = () => {
         break
     }
   }
+  const [style, setStyle] = useState('')
+  useEffect(() => {
+    if (current_weather === undefined) {
+      return
+    } else {
+      fetchUserInfo()
+      console.log(userData)
+      refactorDataFormat(userData, current_weather.condition.text)
+      console.log(current_weather)
+      if (userData.gender == 'male') {
+        axios.get('http://120.26.161.157:5000/male', {
+          params: {
+            temp: current_weather.temp_c,
+            weather: weatherCondition,
+            wind: current_weather.wind_kph + 10,
+            prefer1: clothesPrefer,
+            prefer2: trousersPrefer
+          }
+        }).then(res => {
+          console.log(res.data)
+          setStyle(res.data)
+        })
+      } else {
+        axios.get('http://120.26.161.157:5000/female', {
+          params: {
+            temp: current_weather.temp_c,
+            weather: weatherCondition,
+            wind: current_weather.wind_kph + 10,
+            prefer1: clothesPrefer,
+            prefer2: trousersPrefer
+          }
+        }).then(res => {
+          setStyle(res.data)
+        })
+      }
+    }
+  }, [current_weather])
   const changeClothes = (clothes) => {
     console.log(clothes)
     setClothes(clothes)

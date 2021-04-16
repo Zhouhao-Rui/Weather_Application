@@ -12,6 +12,8 @@ const ProfilePage = ({ navigation }) => {
   const { logout, currentUser } = useAuth()
   const [userData, setUserData] = useState({})
   const [uri, setUri] = useState("")
+  const [clothesUri, setClothesUri] = useState("")
+  const [trousersUri, setTrousersUri] = useState("")
   useEffect(() => {
     fetchUserInfo()
   }, [])
@@ -20,6 +22,10 @@ const ProfilePage = ({ navigation }) => {
     setUserData(user.data())
     const uri = await storage().ref(`${currentUser.uid}`).getDownloadURL()
     setUri(uri)
+    const clothes_uri = await storage().ref(`${currentUser.uid}_${userData.clothes}`).getDownloadURL()
+    setClothesUri(clothes_uri)
+    const trousers_uri = await storage().ref(`${currentUser.uid}_${userData.trouseres}`).getDownloadURL()
+    setTrousersUri(trousers_uri)
   }
   const handleChoosePhoto = () => {
     const options = {
@@ -50,6 +56,60 @@ const ProfilePage = ({ navigation }) => {
       }
     })
   }
+  const handleClothesUpload = () => {
+    const options = {
+      noData: true,
+      skipBackup: true
+    }
+    launchImageLibrary(options, async (res) => {
+      console.log(res)
+      if (res.uri) {
+        setClothesUri(res.uri)
+        const filename = currentUser.uid + "_" + userData.clothes
+        const uploadUri = Platform.OS === 'ios' ? res.uri.replace('file://', ''): res.uri
+
+        const task = storage().ref(filename).putFile(uploadUri)
+
+        task.on('state_changed', snapshot => {
+          console.log(snapshot)
+        })
+        try {
+          await task;
+        } catch(e) {
+          console.error(e)
+        }
+
+        Alert.alert('photo uploaded', 'photo uploaded success')
+      }
+    })
+  }
+  const handleTrousersUpload = () => {
+    const options = {
+      noData: true,
+      skipBackup: true
+    }
+    launchImageLibrary(options, async (res) => {
+      console.log(res)
+      if (res.uri) {
+        setTrousersUri(res.uri)
+        const filename = currentUser.uid + "_" + userData.trouseres
+        const uploadUri = Platform.OS === 'ios' ? res.uri.replace('file://', ''): res.uri
+
+        const task = storage().ref(filename).putFile(uploadUri)
+
+        task.on('state_changed', snapshot => {
+          console.log(snapshot)
+        })
+        try {
+          await task;
+        } catch(e) {
+          console.error(e)
+        }
+
+        Alert.alert('photo uploaded', 'photo uploaded success')
+      }
+    })
+  }
   console.log(userData)
   return (
     <ScrollView>
@@ -65,10 +125,22 @@ const ProfilePage = ({ navigation }) => {
 
       <View style={styles.infoContainer}>
         <Text style={styles.text, { fontWeight: "200", fontSize: 20 }}>{userData.email}</Text>
-        <Text style={styles.text, { color: "#AEB5BC", fontSize: 14, marginTop: 20 }}>favorite clothes: {userData.clothes}</Text>
-        <Text style={styles.text, { color: "#AEB5BC", fontSize: 14 }}>favorite trousers: {userData.clothes}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' }}>
+          <Text style={styles.text, { color: "#AEB5BC", fontSize: 14, marginTop: 20 }}>favorite clothes: {userData.clothes}</Text>
+          <Icon name="cloud-upload-outline" style={styles.upload} size={25} color="#333" onPress={handleClothesUpload} />
+        </View>
+        {clothesUri ? (
+          <Image source={{uri: clothesUri}} style={{ resizeMode: 'contain', width: 80, height: 80, marginTop: 20 }} />
+        ): <></>}
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' }}>
+          <Text style={styles.text, { color: "#AEB5BC", fontSize: 14, marginTop: 15 }}>favorite trousers: {userData.trouseres}</Text>
+          <Icon name="cloud-upload-outline" style={styles.upload} size={25} color="#333" onPress={handleTrousersUpload} />
+        </View>
+        {trousersUri ? (
+          <Image source={{uri: trousersUri}} style={{resizeMode: 'contain', width: 80, height: 80, marginTop: 20}} />
+        ): <></>}
       </View>
-      <TouchableWithoutFeedback style={styles.button} onPress={() => {logout(); navigation.navigate('Login')}}>
+      <TouchableWithoutFeedback style={styles.button} onPress={() => { logout(); navigation.navigate('Login') }}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableWithoutFeedback>
     </ScrollView >
@@ -107,7 +179,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
-    marginTop: 80,
+    marginTop: 40,
     borderRadius: 40
   },
   buttonText: {
@@ -116,4 +188,10 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 20
   },
+  upload: {
+    marginLeft: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 30
+  }
 })
