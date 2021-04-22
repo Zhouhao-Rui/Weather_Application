@@ -9,6 +9,8 @@ My weather application focus on giving advice for the the user with potential he
 1. run npx react-native eject to generate the android and ios folder,
 
 2. to config the firebase and Google-map geolocation
+
+
    --Add the google-services.json with firebase.
 
    --Generate the google geo API in the Google map to add in the AndroidManifest.xml.
